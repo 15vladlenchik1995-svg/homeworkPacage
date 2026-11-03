@@ -1,23 +1,27 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.product.SimpleProduct;
+
 
 public class App {
     public static void main(String[] args) {
         ProductBasket basket = new ProductBasket();
 
         // 1. Добавление продуктов
-        basket.addProduct(new Product("Яблоко", 50));
-        basket.addProduct(new Product("Хлеб", 40));
-        basket.addProduct(new Product("Молоко", 80));
+        basket.addProduct(new SimpleProduct("Яблоко", 50));
+        basket.addProduct(new SimpleProduct("Хлеб", 40));
+        basket.addProduct(new SimpleProduct("Молоко", 80));
 
         // 2. Заполняем корзину до конца
-        basket.addProduct(new Product("Сыр", 120));
-        basket.addProduct(new Product("Йогурт", 35));
+        basket.addProduct(new DiscountedProduct("Сыр", 120,20));
+        basket.addProduct(new FixPriceProduct("Йогурт"));
 
         // 3. Пытаемся добавить в заполненную корзину
-        basket.addProduct(new Product("Сок", 70)); // Должно вывести: Невозможно добавить продукт
+        basket.addProduct(new SimpleProduct("Сок", 70));
 
         // 4. Печать содержимого
         System.out.println("=== Содержимое корзины ===");
