@@ -8,7 +8,7 @@ public class SimpleProduct extends Product{
         this.price=price;
     }
 
-    @Override
+@Override
     public int getPrice(){
         return price;
     }
