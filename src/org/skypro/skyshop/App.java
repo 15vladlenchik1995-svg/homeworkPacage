@@ -28,7 +28,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-      //  ProductBasket basket = new ProductBasket();
+        //  ProductBasket basket = new ProductBasket();
         SearchEngine engine = new SearchEngine(10);
 
         // 1. Добавление продуктов
@@ -93,8 +93,6 @@ public class App {
 
         //Проверка на два одинаковых параметра  разных объектов
         printSearchResult(engine.search("сок"));
-
-
 
 
     }
