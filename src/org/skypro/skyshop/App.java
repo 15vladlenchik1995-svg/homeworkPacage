@@ -1,14 +1,12 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.article.Article;
-import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.search.BestResultNotFound;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.searchable.Searchable;
-
-import java.util.Arrays;
 
 
 public class App {
@@ -28,7 +26,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        //  ProductBasket basket = new ProductBasket();
+
         SearchEngine engine = new SearchEngine(10);
 
         // 1. Добавление продуктов
@@ -38,19 +36,45 @@ public class App {
         SimpleProduct bread = new SimpleProduct("Хлеб", 40);
         engine.add(bread);
 
-        SimpleProduct milk = new SimpleProduct("Молоко", 80);
-        engine.add(milk);
+
+        System.out.println("Проверка №1 :  создание объекта без имени(одни пробелы):");
+        try {
+            SimpleProduct milk = new SimpleProduct("  ", 100);
+            engine.add(milk);
+            System.out.println("Создалось :" + milk);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка :" + e.getMessage());
+        }
+        System.out.println("\n");
 
 
-        DiscountedProduct cheese = new DiscountedProduct("Сыр", 120, 20);
-        engine.add(cheese);
+        System.out.println("Проверка №2 : создание объкта с неположительной базовой ценой :");
+        try {
+            DiscountedProduct cheese = new DiscountedProduct("Сыр", 0, 80);
+            engine.add(cheese);
+            System.out.println("Создалось :" + cheese);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка :" + e.getMessage());
+        }
+        System.out.println("\n");
+
+
+        System.out.println("Проверка №3 : создание объкта со скидкой в % вне диапазона 0-100 :");
+        try {
+            DiscountedProduct cupcake = new DiscountedProduct("Кекс", 20, 101);
+            engine.add(cupcake);
+            System.out.println("Создалось :" + cupcake);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка :" + e.getMessage());
+        }
+        System.out.println("\n");
 
         FixPriceProduct juice = new FixPriceProduct("Сок");
         engine.add(juice);
 
         //Добавляем несколько статей
         Article article1 = new Article("Курорты", "Море этим летом особенно теплое" +
-                "...Холодный сок очень кстати  ");
+                "...Холодный сок очень кстати , сок соку рознь ");
         engine.add(article1);
 
         Article article2 = new Article("Комикс", "Человек паук против железного человека");
@@ -81,7 +105,7 @@ public class App {
         System.out.println("Стоимость пустой корзины: " + basket.getTotalPrice());
 
         // 11. Поиск в пустой корзине
-        System.out.println("Есть 'Молоко': " + basket.containsProduct("Молоко")); */
+        System.out.println("Есть 'Молоко': " + basket.containsProduct("Молоко"));
 
         //Поиск результатов без учета регистра
         printSearchResult(engine.search("МОЛоко"));
@@ -92,7 +116,26 @@ public class App {
         printSearchResult(engine.search("лыжи"));
 
         //Проверка на два одинаковых параметра  разных объектов
-        printSearchResult(engine.search("сок"));
+        printSearchResult(engine.search("Молоко")); */
+        // Сценарий 1 : результат существуeт
+
+        System.out.println("Поиск лучшего результата : "+"\"сок\"");
+        try {
+           Searchable best = engine.findBestResult("сок");
+            System.out.println("Лучший результат :"+best.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка :"+e.getMessage());
+        }
+        System.out.println();
+
+        // Сценарий 2 : результат отсутствует(проверка краевых ситуаций)
+        System.out.println("Поиск пустого запроса : "+"\"\"");
+        try {
+           Searchable best = engine.findBestResult("");
+            System.out.println("Лучший результат :"+best.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка :"+e.getMessage());
+        }
 
 
     }
