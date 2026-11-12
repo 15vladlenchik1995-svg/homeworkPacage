@@ -19,6 +19,7 @@ public class App {
         if(results.isEmpty()){
             System.out.println("Ничего не найдено");
             return;
+
         }
         for(Searchable c : results){
             System.out.println(c.getStringRepresentation());
