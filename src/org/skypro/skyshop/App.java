@@ -35,6 +35,7 @@ public class App {
         engine.add(apple);
 
 
+
         SimpleProduct apple1 = new SimpleProduct("Яблоко", 50);
         engine.add(apple1);
 
