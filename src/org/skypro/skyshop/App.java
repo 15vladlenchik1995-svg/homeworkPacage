@@ -1,40 +1,96 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.article.Article;
+import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
+import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.search.BestResultNotFound;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.searchable.Searchable;
 
+import java.util.List;
+
 
 public class App {
     //Метод удобного вывода поиска
-    public static void printSearchResult(Searchable[] results) {
-        boolean foundAny = false;
-        for (Searchable item : results) {
-            if (item != null) {
-                System.out.println(item.getStringRepresentation());
-                foundAny = true;
+    public static void printSearchResult(List<Searchable> results) {
+        if(results.isEmpty()){
+            System.out.println("Ничего не найдено");
+            return;
+        }
+        for(Searchable c : results){
+            System.out.println(c.getStringRepresentation());
+        }
 
-            }
-        }
-        if (!foundAny) {
-            System.out.println("По запросу ничего не найдено");
-        }
     }
 
     public static void main(String[] args) {
 
-        SearchEngine engine = new SearchEngine(10);
+        SearchEngine engine = new SearchEngine();
 
-        // 1. Добавление продуктов
-        SimpleProduct apple = new SimpleProduct("Яблоко", 50);
+        //Содание продуктов с одинаковым именем
+        SimpleProduct apple = new SimpleProduct("яблоко", 50);
         engine.add(apple);
+
+        SimpleProduct apple1 = new SimpleProduct("Яблоко", 50);
+        engine.add(apple1);
 
         SimpleProduct bread = new SimpleProduct("Хлеб", 40);
         engine.add(bread);
+
+        SimpleProduct bread1 = new SimpleProduct("Хлеб", 40);
+        engine.add(bread1);
+
+
+        //Java Collections Framework: List Домашнее задание
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        ProductBasket basket = new ProductBasket();
+        basket.addProduct(apple);
+        basket.addProduct(bread);
+        basket.addProduct(apple1);
+        basket.addProduct(bread1);
+
+        System.out.println("Java Collections Framework: List Домашнее задание :");
+        System.out.println("Корзина до удаления продуктов :");
+        System.out.println();
+        basket.printBasket();
+        System.out.println();
+        //Переменная для хранения удаленных продуктов(регистр не учитывается)
+        List<Product> removed = basket.removeProductsByName("яБлоко");
+
+        for(Product c : removed){
+            System.out.println("Удалён продукт :"+c);
+        }
+        System.out.println();
+        System.out.println("=== Демонстрация корзины после удаления продуктов ===");
+        System.out.println();
+        basket.printBasket();
+
+        List<Product> removed2 = basket.removeProductsByName("мороженое");
+
+        if (removed2.isEmpty()) {
+            System.out.println("Список пуст");
+        }
+
+        basket.printBasket();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+
+
+
+
+
+
+
 
 
         System.out.println("Проверка №1 :  создание объекта без имени(одни пробелы):");
@@ -82,7 +138,7 @@ public class App {
 
         Article article3 = new Article("Звезды", "Номинацию на премию оскар получил...");
         engine.add(article3);
-        /*
+
 
         // 4. Печать содержимого
         System.out.println("=== Содержимое корзины ===");
@@ -92,10 +148,13 @@ public class App {
         System.out.println("Стоимость корзины: " + basket.getTotalPrice());
 
         // 6. Поиск товара, который есть
-        System.out.println("Есть 'Молоко': " + basket.containsProduct("Молоко"));
+        System.out.println("Есть 'хлеб': " + basket.containsProduct("ХлЕб"));
 
         // 7. Поиск товара, которого нет
         System.out.println("Есть 'Сок': " + basket.containsProduct("Сок"));
+
+        // 8. Удаление корзины
+        basket.clearBasket();
 
 
         // 9. Печать пустой корзины
@@ -105,7 +164,7 @@ public class App {
         System.out.println("Стоимость пустой корзины: " + basket.getTotalPrice());
 
         // 11. Поиск в пустой корзине
-        System.out.println("Есть 'Молоко': " + basket.containsProduct("Молоко"));
+        System.out.println("Есть 'хлеб': " + basket.containsProduct("хлеб"));
 
         //Поиск результатов без учета регистра
         printSearchResult(engine.search("МОЛоко"));
@@ -116,7 +175,7 @@ public class App {
         printSearchResult(engine.search("лыжи"));
 
         //Проверка на два одинаковых параметра  разных объектов
-        printSearchResult(engine.search("Молоко")); */
+        printSearchResult(engine.search("квас"));
         // Сценарий 1 : результат существуeт
 
         System.out.println("Поиск лучшего результата : "+"\"сок\"");
@@ -136,6 +195,8 @@ public class App {
         } catch (BestResultNotFound e) {
             System.out.println("Ошибка :"+e.getMessage());
         }
+
+
 
 
     }
